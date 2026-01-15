@@ -1,0 +1,635 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Vazifa Tafsilotlari{% endblock %}
+
+{% block extra_css %}
+<style>
+.homework-detail {
+    padding: 2rem 0;
+    min-height: calc(100vh - 200px);
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    transition: var(--transition);
+}
+
+.back-link:hover {
+    gap: 12px;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+}
+
+.detail-card {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+}
+
+.homework-title {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: var(--dark);
+}
+
+.homework-badges {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.badge {
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.badge-course {
+    background: rgba(79, 70, 229, 0.1);
+    color: var(--primary);
+}
+
+.badge-deadline {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+}
+
+.badge-status {
+    padding: 8px 16px;
+    border-radius: 50px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.badge-pending {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+}
+
+.badge-submitted {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3B82F6;
+}
+
+.badge-graded {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--secondary);
+}
+
+.description-section {
+    margin: 2rem 0;
+}
+
+.description-section h3 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.description-content {
+    color: var(--gray);
+    line-height: 1.8;
+    white-space: pre-wrap;
+}
+
+.sidebar-card {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 1.5rem;
+}
+
+.sidebar-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.info-list {
+    list-style: none;
+}
+
+.info-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--light);
+}
+
+.info-list li:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    color: var(--gray);
+    font-weight: 500;
+}
+
+.info-value {
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.upload-section {
+    background: var(--light);
+    padding: 2rem;
+    border-radius: var(--radius);
+    margin-top: 2rem;
+}
+
+.upload-area {
+    border: 3px dashed #D1D5DB;
+    border-radius: var(--radius);
+    padding: 3rem;
+    text-align: center;
+    background: var(--white);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.upload-area:hover {
+    border-color: var(--primary);
+    background: rgba(79, 70, 229, 0.05);
+}
+
+.upload-area.dragover {
+    border-color: var(--primary);
+    background: rgba(79, 70, 229, 0.1);
+}
+
+.upload-icon {
+    font-size: 3rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+}
+
+.file-input {
+    display: none;
+}
+
+.selected-file {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--white);
+    padding: 1rem;
+    border-radius: var(--radius);
+    margin-top: 1rem;
+    border: 2px solid var(--secondary);
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.file-icon {
+    width: 50px;
+    height: 50px;
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: var(--secondary);
+}
+
+.remove-file {
+    background: none;
+    border: none;
+    color: var(--danger);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.grade-section {
+    background: linear-gradient(135deg, var(--secondary), #059669);
+    color: white;
+    padding: 2rem;
+    border-radius: var(--radius);
+    text-align: center;
+}
+
+.grade-value {
+    font-size: 4rem;
+    font-weight: 700;
+    margin: 1rem 0;
+}
+
+.grade-feedback {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 1rem;
+    border-radius: var(--radius);
+    margin-top: 1rem;
+    text-align: left;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.alert-warning {
+    background: rgba(245, 158, 11, 0.1);
+    color: var(--warning);
+    border: 1px solid var(--warning);
+}
+
+.alert-success {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--secondary);
+    border: 1px solid var(--secondary);
+}
+
+.alert-error {
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    border: 1px solid var(--danger);
+}
+
+.loading {
+    text-align: center;
+    padding: 3rem;
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid var(--light);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="homework-detail">
+    <div class="container">
+        <a href="/student/" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            Orqaga qaytish
+        </a>
+        
+        <div id="loadingSection" class="loading">
+            <div class="loading-spinner"></div>
+            <p>Yuklanmoqda...</p>
+        </div>
+        
+        <div id="contentSection" style="display: none;">
+            <div class="detail-grid">
+                <div>
+                    <div class="detail-card">
+                        <h1 class="homework-title" id="homeworkTitle"></h1>
+                        
+                        <div class="homework-badges">
+                            <span class="badge badge-course" id="courseBadge"></span>
+                            <span class="badge badge-deadline" id="deadlineBadge"></span>
+                        </div>
+                        
+                        <div id="alertContainer"></div>
+                        
+                        <div class="description-section">
+                            <h3>
+                                <i class="fas fa-align-left"></i>
+                                Vazifa tavsifi
+                            </h3>
+                            <div class="description-content" id="homeworkDescription"></div>
+                        </div>
+                        
+                        <div id="uploadSection" style="display: none;">
+                            <div class="upload-section">
+                                <h3 style="margin-bottom: 1rem;">
+                                    <i class="fas fa-upload"></i>
+                                    Vazifani yuklash
+                                </h3>
+                                
+                                <div class="upload-area" id="uploadArea" onclick="document.getElementById('fileInput').click()">
+                                    <div class="upload-icon">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                    </div>
+                                    <p><strong>Faylni tanlang</strong> yoki bu yerga tashlang</p>
+                                    <p style="color: var(--gray); font-size: 0.9rem; margin-top: 0.5rem;">
+                                        PDF, DOC, ZIP (Max: 10MB)
+                                    </p>
+                                </div>
+                                
+                                <input type="file" id="fileInput" class="file-input" accept=".pdf,.doc,.docx,.zip,.rar">
+                                
+                                <div id="selectedFile" style="display: none;" class="selected-file">
+                                    <div class="file-info">
+                                        <div class="file-icon">
+                                            <i class="fas fa-file"></i>
+                                        </div>
+                                        <div>
+                                            <strong id="fileName"></strong>
+                                            <p style="color: var(--gray); font-size: 0.9rem;" id="fileSize"></p>
+                                        </div>
+                                    </div>
+                                    <button class="remove-file" onclick="removeFile()">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                </div>
+                                
+                                <button class="btn btn-primary btn-block" style="margin-top: 1rem;" id="submitBtn" onclick="submitHomework()">
+                                    <i class="fas fa-paper-plane"></i>
+                                    Topshirish
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div id="submittedSection" style="display: none;">
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle"></i>
+                                Vazifa topshirilgan! Ustoz baholashini kutmoqda...
+                            </div>
+                            <div class="selected-file">
+                                <div class="file-info">
+                                    <div class="file-icon">
+                                        <i class="fas fa-file-check"></i>
+                                    </div>
+                                    <div>
+                                        <strong>Topshirilgan fayl</strong>
+                                        <p style="color: var(--gray); font-size: 0.9rem;" id="submittedDate"></p>
+                                    </div>
+                                </div>
+                                <a href="#" id="downloadLink" class="btn btn-primary" style="padding: 8px 16px;">
+                                    <i class="fas fa-download"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="sidebar-card">
+                        <h3>
+                            <i class="fas fa-info-circle"></i>
+                            Ma'lumotlar
+                        </h3>
+                        <ul class="info-list">
+                            <li>
+                                <span class="info-label">Muddat:</span>
+                                <span class="info-value" id="deadlineInfo"></span>
+                            </li>
+                            <li>
+                                <span class="info-label">Ustoz:</span>
+                                <span class="info-value" id="teacherInfo"></span>
+                            </li>
+                            <li>
+                                <span class="info-label">Guruh:</span>
+                                <span class="info-value" id="groupInfo"></span>
+                            </li>
+                            <li>
+                                <span class="info-label">Maks. baho:</span>
+                                <span class="info-value" id="maxGradeInfo"></span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="sidebar-card" id="statusCard">
+                        <h3>
+                            <i class="fas fa-clipboard-check"></i>
+                            Holat
+                        </h3>
+                        <div style="text-align: center; padding: 1rem;">
+                            <span class="badge-status" id="statusBadge"></span>
+                        </div>
+                    </div>
+                    
+                    <div id="gradeCard" style="display: none;">
+                        <div class="grade-section">
+                            <h3><i class="fas fa-star"></i> Sizning bahoyingiz</h3>
+                            <div class="grade-value" id="gradeValue"></div>
+                            <div class="grade-feedback" id="gradeFeedback"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Get homework ID from URL
+const homeworkId = window.location.pathname.split('/')[2];
+
+let selectedFile = null;
+
+// Load homework details
+async function loadHomeworkDetail() {
+    const token = localStorage.getItem('access_token');
+    
+    try {
+        const response = await fetch(`/api/homework/${homeworkId}/`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to load homework');
+        }
+        
+        const data = await response.json();
+        displayHomework(data);
+        
+    } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('loadingSection').innerHTML = `
+            <div class="alert alert-error">
+                <i class="fas fa-exclamation-circle"></i>
+                Vazifa yuklanmadi. Iltimos qayta urinib ko'ring.
+            </div>
+        `;
+    }
+}
+
+function displayHomework(data) {
+    document.getElementById('homeworkTitle').textContent = data.title;
+    document.getElementById('courseBadge').textContent = data.course_name;
+    document.getElementById('homeworkDescription').textContent = data.description;
+    
+    const deadline = new Date(data.deadline);
+    const now = new Date();
+    const isExpired = deadline < now;
+    
+    document.getElementById('deadlineBadge').innerHTML = `
+        <i class="fas fa-clock"></i> ${deadline.toLocaleDateString('uz-UZ')} ${deadline.toLocaleTimeString('uz-UZ', {hour: '2-digit', minute: '2-digit'})}
+    `;
+    
+    document.getElementById('deadlineInfo').textContent = deadline.toLocaleString('uz-UZ');
+    document.getElementById('teacherInfo').textContent = data.teacher_name || 'N/A';
+    document.getElementById('groupInfo').textContent = data.group_name || 'N/A';
+    document.getElementById('maxGradeInfo').textContent = data.max_grade || 100;
+    
+    // Status
+    const statusMap = {
+        'PENDING': { text: 'Kutilmoqda', class: 'badge-pending' },
+        'SUBMITTED': { text: 'Topshirilgan', class: 'badge-submitted' },
+        'GRADED': { text: 'Baholangan', class: 'badge-graded' }
+    };
+    
+    const status = statusMap[data.status] || statusMap['PENDING'];
+    const statusBadge = document.getElementById('statusBadge');
+    statusBadge.textContent = status.text;
+    statusBadge.className = `badge-status ${status.class}`;
+    
+    // Alert for expired deadline
+    if (isExpired && data.status === 'PENDING') {
+        document.getElementById('alertContainer').innerHTML = `
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle"></i>
+                Muddat o'tgan! Vazifa topshira olmaysiz.
+            </div>
+        `;
+    }
+    
+    // Show appropriate section
+    if (data.status === 'PENDING' && !isExpired) {
+        document.getElementById('uploadSection').style.display = 'block';
+    } else if (data.status === 'SUBMITTED' || data.status === 'GRADED') {
+        document.getElementById('submittedSection').style.display = 'block';
+        if (data.submission) {
+            document.getElementById('submittedDate').textContent = 
+                new Date(data.submission.submitted_at).toLocaleString('uz-UZ');
+            document.getElementById('downloadLink').href = data.submission.file_url;
+        }
+    }
+    
+    // Show grade if graded
+    if (data.status === 'GRADED' && data.grade) {
+        document.getElementById('gradeCard').style.display = 'block';
+        document.getElementById('gradeValue').textContent = data.grade;
+        document.getElementById('gradeFeedback').textContent = data.feedback || 'Izoh yo\'q';
+    }
+    
+    document.getElementById('loadingSection').style.display = 'none';
+    document.getElementById('contentSection').style.display = 'block';
+}
+
+// File upload handling
+document.getElementById('fileInput').addEventListener('change', function(e) {
+    handleFile(e.target.files[0]);
+});
+
+// Drag and drop
+const uploadArea = document.getElementById('uploadArea');
+
+uploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.classList.add('dragover');
+});
+
+uploadArea.addEventListener('dragleave', () => {
+    uploadArea.classList.remove('dragover');
+});
+
+uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('dragover');
+    handleFile(e.dataTransfer.files[0]);
+});
+
+function handleFile(file) {
+    if (!file) return;
+    
+    // Validate file size (10MB)
+    if (file.size > 10 * 1024 * 1024) {
+        alert('Fayl hajmi 10MB dan kichik bo\'lishi kerak!');
+        return;
+    }
+    
+    selectedFile = file;
+    
+    document.getElementById('fileName').textContent = file.name;
+    document.getElementById('fileSize').textContent = formatFileSize(file.size);
+    document.getElementById('selectedFile').style.display = 'flex';
+    document.getElementById('uploadArea').style.display = 'none';
+}
+
+function removeFile() {
+    selectedFile = null;
+    document.getElementById('fileInput').value = '';
+    document.getElementById('selectedFile').style.display = 'none';
+    document.getElementById('uploadArea').style.display = 'block';
+}
+
+function formatFileSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+async function submitHomework() {
+    if (!selectedFile) {
+        alert('Iltimos fayl tanlang!');
+        return;
+    }
+    
+    const token = localStorage.getItem('access_token');
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    
+    const submitBtn = document.getElementById('submitBtn');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Yuklanmoqda...';
+    
+    try {
+        const response = await fetch(`/api/homework/${homeworkId}/submit/`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to submit');
+        }
+        
+        // Reload page to show success
+        location.reload();
+        
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Topshirishda xatolik yuz berdi!');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Topshirish';
+    }
+}
+
+// Check auth and load
+if (!localStorage.getItem('access_token')) {
+    window.location.href = '/login/';
+} else {
+    loadHomeworkDetail();
+}
+</script>
+{% endblock %}

@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Bosh Sahifa - O'quv Markazi{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Kelajakni <span class="gradient-text">Dasturlash</span> Bilan Quring
+            </h1>
+            <p class="hero-subtitle">
+                Professional dasturlash kurslarida o'qing va IT sohasida muvaffaqiyatli karyera boshlang
+            </p>
+            <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">O'quvchilar</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">15+</span>
+                    <span class="stat-label">Kurslar</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">95%</span>
+                    <span class="stat-label">Ish topish</span>
+                </div>
+            </div>
+            <div class="hero-actions">
+                <a href="/login/" class="btn btn-primary btn-lg">
+                    <i class="fas fa-rocket"></i> Boshlash
+                </a>
+                <a href="#courses" class="btn btn-outline btn-lg">
+                    <i class="fas fa-book"></i> Kurslar
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="hero-shape"></div>
+</section>
+
+<!-- Features Section -->
+<section class="features">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-badge">Nima uchun biz?</span>
+            <h2>Bizning Afzalliklarimiz</h2>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+                <h3>Real Loyihalar</h3>
+                <p>Portfolio uchun haqiqiy loyihalar ustida ishlang</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h3>Tajribali Ustozlar</h3>
+                <p>IT kompaniyalarida ishlovchi professional ustozlar</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-certificate"></i>
+                </div>
+                <h3>Sertifikat</h3>
+                <p>Kurs tugagach xalqaro standartdagi sertifikat</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+                <h3>Ish Topishda Yordam</h3>
+                <p>Portfolio tayyorlash va ish topishda qo'llab-quvvatlash</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <h3>Moslashuvchan Jadval</h3>
+                <p>Ertalabki va kechki guruhlar</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h3>24/7 Qo'llab-quvvatlash</h3>
+                <p>Savollaringizga doim tayyor mentorlarga murojaat</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Courses Section -->
+<section class="courses" id="courses">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-badge">Bizning kurslar</span>
+            <h2>Mashhur Yo'nalishlar</h2>
+            <p>Eng so'ralgan va istiqbolli dasturlash yo'nalishlari</p>
+        </div>
+        
+        <div class="courses-grid">
+            <div class="course-card">
+                <div class="course-badge">Backend</div>
+                <div class="course-icon">
+                    <i class="fab fa-python"></i>
+                </div>
+                <h3>Python Backend</h3>
+                <p>Django va Django REST Framework asosida professional backend dasturlash</p>
+                <ul class="course-features">
+                    <li><i class="fas fa-check"></i> 6 oy davomiylik</li>
+                    <li><i class="fas fa-check"></i> Real loyihalar</li>
+                    <li><i class="fas fa-check"></i> Portfolio tayyorlash</li>
+                </ul>
+                <div class="course-footer">
+                    <span class="course-price">500,000 so'm/oy</span>
+                    <a href="/login/" class="btn btn-primary">Ro'yxatdan o'tish</a>
+                </div>
+            </div>
+            
+            <div class="course-card featured">
+                <div class="course-badge popular">Ommabop</div>
+                <div class="course-icon">
+                    <i class="fab fa-js"></i>
+                </div>
+                <h3>Full Stack JavaScript</h3>
+                <p>React va Node.js bilan to'liq qamrovli web dasturlash</p>
+                <ul class="course-features">
+                    <li><i class="fas fa-check"></i> 8 oy davomiylik</li>
+                    <li><i class="fas fa-check"></i> Frontend + Backend</li>
+                    <li><i class="fas fa-check"></i> 5+ loyiha</li>
+                </ul>
+                <div class="course-footer">
+                    <span class="course-price">600,000 so'm/oy</span>
+                    <a href="/login/" class="btn btn-primary">Ro'yxatdan o'tish</a>
+                </div>
+            </div>
+            
+            <div class="course-card">
+                <div class="course-badge">Frontend</div>
+                <div class="course-icon">
+                    <i class="fab fa-react"></i>
+                </div>
+                <h3>React.js</h3>
+                <p>Zamonaviy frontend frameworkda professional dasturlash</p>
+                <ul class="course-features">
+                    <li><i class="fas fa-check"></i> 4 oy davomiylik</li>
+                    <li><i class="fas fa-check"></i> Redux va TypeScript</li>
+                    <li><i class="fas fa-check"></i> UI/UX asoslari</li>
+                </ul>
+                <div class="course-footer">
+                    <span class="course-price">450,000 so'm/oy</span>
+                    <a href="/login/" class="btn btn-primary">Ro'yxatdan o'tish</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Teachers Section -->
+<section class="teachers" id="teachers">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-badge">Bizning jamoa</span>
+            <h2>Professional Ustozlar</h2>
+        </div>
+        
+        <div class="teachers-grid">
+            <div class="teacher-card">
+                <div class="teacher-img">
+                    <img src="{% static 'img/teacher1.jpg' %}" alt="Ustoz" onerror="this.src='https://ui-avatars.com/api/?name=Alisher+Karimov&size=200&background=4F46E5&color=fff'">
+                </div>
+                <h3>Alisher Karimov</h3>
+                <p class="teacher-role">Senior Backend Developer</p>
+                <p class="teacher-experience">5+ yillik tajriba</p>
+                <div class="teacher-skills">
+                    <span>Python</span>
+                    <span>Django</span>
+                    <span>PostgreSQL</span>
+                </div>
+            </div>
+            
+            <div class="teacher-card">
+                <div class="teacher-img">
+                    <img src="{% static 'img/teacher2.jpg' %}" alt="Ustoz" onerror="this.src='https://ui-avatars.com/api/?name=Dilshod+Ergashev&size=200&background=10B981&color=fff'">
+                </div>
+                <h3>Dilshod Ergashev</h3>
+                <p class="teacher-role">Full Stack Developer</p>
+                <p class="teacher-experience">7+ yillik tajriba</p>
+                <div class="teacher-skills">
+                    <span>React</span>
+                    <span>Node.js</span>
+                    <span>MongoDB</span>
+                </div>
+            </div>
+            
+            <div class="teacher-card">
+                <div class="teacher-img">
+                    <img src="{% static 'img/teacher3.jpg' %}" alt="Ustoz" onerror="this.src='https://ui-avatars.com/api/?name=Jamshid+Saidov&size=200&background=F59E0B&color=fff'">
+                </div>
+                <h3>Jamshid Saidov</h3>
+                <p class="teacher-role">Frontend Architect</p>
+                <p class="teacher-experience">6+ yillik tajriba</p>
+                <div class="teacher-skills">
+                    <span>React</span>
+                    <span>TypeScript</span>
+                    <span>Next.js</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Process Section -->
+<section class="process" id="about">
+    <div class="container">
+        <div class="section-header">
+            <span class="section-badge">Qanday o'qiymiz?</span>
+            <h2>O'quv Jarayoni</h2>
+        </div>
+        
+        <div class="process-grid">
+            <div class="process-step">
+                <div class="step-number">01</div>
+                <h3>Ro'yxatdan O'tish</h3>
+                <p>Platformada ro'yxatdan o'ting va kursni tanlang</p>
+            </div>
+            
+            <div class="process-step">
+                <div class="step-number">02</div>
+                <h3>Darslar</h3>
+                <p>Hafta ichida 3 kun jonli darslar va amaliy mashg'ulotlar</p>
+            </div>
+            
+            <div class="process-step">
+                <div class="step-number">03</div>
+                <h3>Uy Vazifalari</h3>
+                <p>Har darsdan keyin amaliy topshiriqlar va loyihalar</p>
+            </div>
+            
+            <div class="process-step">
+                <div class="step-number">04</div>
+                <h3>Sertifikat</h3>
+                <p>Kursni muvaffaqiyatli tugatganingizda sertifikat olasiz</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Section -->
+<section class="contact" id="contact">
+    <div class="container">
+        <div class="contact-grid">
+            <div class="contact-info">
+                <h2>Biz Bilan Bog'laning</h2>
+                <p>Savollaringiz bormi? Biz sizga yordam berishga tayyormiz!</p>
+                
+                <div class="contact-methods">
+                    <div class="contact-method">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h4>Telefon</h4>
+                            <p>+998 90 123 45 67</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <p>info@eduplatform.uz</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-method">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Manzil</h4>
+                            <p>Toshkent sh., Yunusobod tumani</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="contact-form">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <input type="text" placeholder="Ismingiz" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="tel" placeholder="Telefon raqamingiz" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Xabaringiz" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-paper-plane"></i> Yuborish
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

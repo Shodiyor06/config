@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<script>
+if (!localStorage.getItem("token")) {
+  location.href = "/static/frontend/login.html";
+}
+</script>
+
+<h2>Baho qo‘yish</h2>
+
+<input id="score" placeholder="Score (0-100)"><br><br>
+<textarea id="feedback" placeholder="Izoh"></textarea><br><br>
+
+<button onclick="grade()">Saqlash</button>
+
+<script>
+const id = new URLSearchParams(location.search).get("id");
+
+function grade() {
+  fetch(`/api/homework/grade/${id}/`, {
+    method: "POST",
+    headers: {
+      "Authorization": "Bearer " + localStorage.getItem("token"),
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      score: score.value,
+      feedback: feedback.value
+    })
+  })
+  .then(r => r.json())
+  .then(d => alert(JSON.stringify(d)));
+}
+</script>
+
+</body>
+</html>

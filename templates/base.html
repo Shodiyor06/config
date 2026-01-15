@@ -1,0 +1,126 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Zamonaviy o'quv markazi - Professional dasturlash kurslari">
+    <title>{% block title %}O'quv Markazi{% endblock %}</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="container">
+            <div class="nav-wrapper">
+                <a href="/" class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>EduPlatform</span>
+                </a>
+                
+                <div class="nav-menu" id="navMenu">
+                    <a href="/" class="nav-link">Bosh sahifa</a>
+                    <a href="/#courses" class="nav-link">Kurslar</a>
+                    <a href="/#teachers" class="nav-link">Ustozlar</a>
+                    <a href="/#about" class="nav-link">Biz haqimizda</a>
+                    <a href="/#contact" class="nav-link">Aloqa</a>
+                </div>
+                
+                <div class="nav-actions">
+                    <div class="user-menu" id="userMenu" style="display: none;">
+                        <button class="user-btn" id="userBtn">
+                            <i class="fas fa-user-circle"></i>
+                            <span id="userName">Profil</span>
+                        </button>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <a href="#" id="dashboardLink">
+                                <i class="fas fa-dashboard"></i> Dashboard
+                            </a>
+                            <a href="#" onclick="logout()">
+                                <i class="fas fa-sign-out-alt"></i> Chiqish
+                            </a>
+                        </div>
+                    </div>
+                    <a href="/login/" class="btn btn-primary" id="loginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Kirish
+                    </a>
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3><i class="fas fa-graduation-cap"></i> EduPlatform</h3>
+                    <p>Zamonaviy ta'lim platformasi. Professional dasturlashni o'rganing va karyerangizni boshlang.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Tezkor havolalar</h4>
+                    <ul>
+                        <li><a href="/#courses">Kurslar</a></li>
+                        <li><a href="/#teachers">Ustozlar</a></li>
+                        <li><a href="/#about">Biz haqimizda</a></li>
+                        <li><a href="/login/">Kirish</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Kurslar</h4>
+                    <ul>
+                        <li><a href="#">Python</a></li>
+                        <li><a href="#">Django</a></li>
+                        <li><a href="#">JavaScript</a></li>
+                        <li><a href="#">React</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col">
+                    <h4>Aloqa</h4>
+                    <ul class="contact-list">
+                        <li><i class="fas fa-phone"></i> +998 90 123 45 67</li>
+                        <li><i class="fas fa-envelope"></i> info@eduplatform.uz</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Toshkent, O'zbekiston</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 EduPlatform. Barcha huquqlar himoyalangan.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/auth.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

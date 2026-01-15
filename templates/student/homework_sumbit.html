@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<script>
+if (!localStorage.getItem("token")) {
+  location.href = "/static/frontend/login.html";
+}
+</script>
+
+<h2>Uyga vazifa yuklash</h2>
+
+<input type="file" id="file"><br><br>
+<button onclick="send()">Yuborish</button>
+
+<script>
+const id = new URLSearchParams(location.search).get("id");
+
+function send() {
+  const fd = new FormData();
+  fd.append("file", file.files[0]);
+
+  fetch(`/api/homework/submit/${id}/`, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + localStorage.getItem("token")
+    },
+    body: fd
+  })
+  .then(r => r.json())
+  .then(d => alert(JSON.stringify(d)));
+}
+</script>
+
+</body>
+</html>

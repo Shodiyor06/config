@@ -1,0 +1,546 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Ustoz Paneli{% endblock %}
+
+{% block extra_css %}
+<style>
+.teacher-dashboard {
+    padding: 2rem 0;
+    min-height: calc(100vh - 200px);
+}
+
+.dashboard-header {
+    background: linear-gradient(135deg, #10B981, #059669);
+    color: white;
+    padding: 3rem 0;
+    margin-bottom: 2rem;
+    border-radius: var(--radius);
+}
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 2rem;
+}
+
+.sidebar {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    height: fit-content;
+    box-shadow: var(--shadow);
+}
+
+.sidebar-menu {
+    list-style: none;
+}
+
+.sidebar-menu li {
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-menu a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    color: var(--dark);
+    border-radius: var(--radius);
+    transition: var(--transition);
+}
+
+.sidebar-menu a:hover,
+.sidebar-menu a.active {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--secondary);
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    color: var(--secondary);
+}
+
+.stat-info h4 {
+    color: var(--gray);
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+}
+
+.stat-info p {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.content-section {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.homework-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.homework-item {
+    background: var(--light);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    border-left: 4px solid var(--secondary);
+    transition: var(--transition);
+}
+
+.homework-item:hover {
+    box-shadow: var(--shadow);
+    transform: translateX(5px);
+}
+
+.homework-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 1rem;
+}
+
+.homework-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--dark);
+}
+
+.homework-meta {
+    display: flex;
+    gap: 1rem;
+    color: var(--gray);
+    font-size: 0.9rem;
+}
+
+.submissions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.submission-card {
+    background: var(--light);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    border: 2px solid transparent;
+    transition: var(--transition);
+}
+
+.submission-card:hover {
+    border-color: var(--secondary);
+    box-shadow: var(--shadow);
+}
+
+.submission-card.pending {
+    border-left: 4px solid var(--warning);
+}
+
+.submission-card.graded {
+    border-left: 4px solid var(--secondary);
+}
+
+.student-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.student-avatar {
+    width: 50px;
+    height: 50px;
+    background: var(--primary);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2rem;
+}
+
+.submission-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: var(--radius);
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--gray);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #E5E7EB;
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.grade-input-group {
+    display: flex;
+    gap: 1rem;
+}
+
+.grade-input-group input {
+    flex: 1;
+}
+
+.loading {
+    text-align: center;
+    padding: 2rem;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid var(--light);
+    border-top-color: var(--secondary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--gray);
+}
+
+.empty-state i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.3;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="teacher-dashboard">
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>Salom, <span id="teacherName">Ustoz</span>!</h1>
+            <p>O'quvchilaringiz va vazifalarini boshqaring</p>
+        </div>
+        
+        <div class="dashboard-grid">
+            <aside class="sidebar">
+                <ul class="sidebar-menu">
+                    <li>
+                        <a href="#" class="active" onclick="showSection('overview')">
+                            <i class="fas fa-home"></i>
+                            Asosiy
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showSection('groups')">
+                            <i class="fas fa-users"></i>
+                            Guruhlarim
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showSection('homework')">
+                            <i class="fas fa-tasks"></i>
+                            Vazifalar
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="showSection('submissions')">
+                            <i class="fas fa-clipboard-check"></i>
+                            Topshiriqlar
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+            
+            <div class="main-content">
+                <!-- Overview Section -->
+                <div id="overviewSection">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h4>Guruhlar</h4>
+                                <p id="totalGroups">0</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-user-graduate"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h4>O'quvchilar</h4>
+                                <p id="totalStudents">0</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-tasks"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h4>Vazifalar</h4>
+                                <p id="totalHomework">0</p>
+                            </div>
+                        </div>
+                        
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h4>Baholanmagan</h4>
+                                <p id="pendingGrades">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="content-section">
+                        <div class="section-title">
+                            <h2><i class="fas fa-clipboard-check"></i> Oxirgi Topshiriqlar</h2>
+                        </div>
+                        <div id="recentSubmissions">
+                            <div class="loading">
+                                <div class="loading-spinner"></div>
+                                <p>Yuklanmoqda...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Groups Section -->
+                <div id="groupsSection" style="display: none;">
+                    <div class="content-section">
+                        <div class="section-title">
+                            <h2><i class="fas fa-users"></i> Mening Guruhlarim</h2>
+                        </div>
+                        <div id="groupsList">
+                            <div class="loading">
+                                <div class="loading-spinner"></div>
+                                <p>Yuklanmoqda...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Homework Section -->
+                <div id="homeworkSection" style="display: none;">
+                    <div class="content-section">
+                        <div class="section-title">
+                            <h2><i class="fas fa-tasks"></i> Mening Vazifalarim</h2>
+                            <button class="btn btn-primary" onclick="openCreateHomework()">
+                                <i class="fas fa-plus"></i> Yangi vazifa
+                            </button>
+                        </div>
+                        <div id="homeworkList">
+                            <div class="loading">
+                                <div class="loading-spinner"></div>
+                                <p>Yuklanmoqda...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Submissions Section -->
+                <div id="submissionsSection" style="display: none;">
+                    <div class="content-section">
+                        <div class="section-title">
+                            <h2><i class="fas fa-clipboard-check"></i> Barcha Topshiriqlar</h2>
+                        </div>
+                        <div id="allSubmissions">
+                            <div class="loading">
+                                <div class="loading-spinner"></div>
+                                <p>Yuklanmoqda...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Homework Modal -->
+<div id="createHomeworkModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-plus-circle"></i> Yangi Vazifa Yaratish</h2>
+            <button class="close-modal" onclick="closeCreateHomework()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="createHomeworkForm">
+            <div class="form-group">
+                <label for="homeworkTitle">Mavzu *</label>
+                <input type="text" id="homeworkTitle" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="homeworkDescription">Tavsif *</label>
+                <textarea id="homeworkDescription" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="homeworkGroup">Guruh *</label>
+                <select id="homeworkGroup" required>
+                    <option value="">Guruhni tanlang</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="homeworkDeadline">Muddat *</label>
+                <input type="datetime-local" id="homeworkDeadline" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="homeworkMaxGrade">Maksimal Baho *</label>
+                <input type="number" id="homeworkMaxGrade" value="100" min="1" required>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-block">
+                <i class="fas fa-save"></i> Saqlash
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Grade Modal -->
+<div id="gradeModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-star"></i> Baholash</h2>
+            <button class="close-modal" onclick="closeGradeModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <form id="gradeForm">
+            <input type="hidden" id="submissionId">
+            
+            <div class="form-group">
+                <label>O'quvchi</label>
+                <p id="gradeStudentName" style="font-weight: 600;"></p>
+            </div>
+            
+            <div class="form-group">
+                <label>Vazifa</label>
+                <p id="gradeHomeworkTitle" style="font-weight: 600;"></p>
+            </div>
+            
+            <div class="form-group">
+                <label for="gradeValue">Baho *</label>
+                <input type="number" id="gradeValue" min="0" max="100" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="gradeFeedback">Izoh</label>
+                <textarea id="gradeFeedback" placeholder="O'quvchiga izoh yozing..."></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-block">
+                <i class="fas fa-check"></i> Baholash
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/teacher.js' %}"></script>
+{% endblock %}
