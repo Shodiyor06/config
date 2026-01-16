@@ -12,34 +12,32 @@
                 <h2>Xush Kelibsiz</h2>
                 <p>Platformaga kirish uchun ma'lumotlaringizni kiriting</p>
             </div>
-            
+
             <form id="loginForm" class="auth-form">
                 <div class="form-group">
                     <label for="phone">
                         <i class="fas fa-phone"></i>
                         Telefon raqam
                     </label>
-                    <input 
-                        type="tel" 
-                        id="phone" 
-                        name="phone" 
-                        placeholder="+998 90 123 45 67"
+                    <input
+                        type="tel"
+                        id="phone"
+                        placeholder="90 123 45 67"
                         required
                         class="form-input"
                     >
                 </div>
-                
+
                 <div class="form-group">
                     <label for="password">
                         <i class="fas fa-lock"></i>
                         Parol
                     </label>
                     <div class="password-input">
-                        <input 
-                            type="password" 
-                            id="password" 
-                            name="password" 
-                            placeholder="Parolingizni kiriting"
+                        <input
+                            type="password"
+                            id="password"
+                            placeholder="Parol"
                             required
                             class="form-input"
                         >
@@ -48,58 +46,16 @@
                         </button>
                     </div>
                 </div>
-                
-                <div class="form-options">
-                    <label class="checkbox-label">
-                        <input type="checkbox" id="remember">
-                        <span>Eslab qolish</span>
-                    </label>
-                    <a href="#" class="forgot-link">Parolni unutdingizmi?</a>
-                </div>
-                
-                <div class="alert alert-error" id="errorMessage" style="display: none;">
+
+                <div class="alert alert-error" id="errorMessage" style="display:none;">
                     <i class="fas fa-exclamation-circle"></i>
                     <span id="errorText"></span>
                 </div>
-                
+
                 <button type="submit" class="btn btn-primary btn-block btn-lg" id="loginBtn">
-                    <i class="fas fa-sign-in-alt"></i>
-                    <span>Kirish</span>
-                    <div class="spinner" style="display: none;"></div>
+                    <i class="fas fa-sign-in-alt"></i> Kirish
                 </button>
             </form>
-            
-            <div class="auth-footer">
-                <p>Hali ro'yxatdan o'tmaganmisiz? <a href="#" class="register-link">Ro'yxatdan o'tish</a></p>
-            </div>
-        </div>
-        
-        <div class="auth-info">
-            <div class="info-content">
-                <h3>Platformamizda nima bor?</h3>
-                <ul class="info-list">
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <span>Professional ustozlar</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <span>Real loyihalarda amaliyot</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <span>Interaktiv darslar</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <span>Uy vazifalari tizimi</span>
-                    </li>
-                    <li>
-                        <i class="fas fa-check-circle"></i>
-                        <span>Sertifikat olish</span>
-                    </li>
-                </ul>
-            </div>
         </div>
     </div>
 </section>
@@ -108,56 +64,77 @@
 {% block extra_js %}
 <script>
 function togglePassword() {
-    const passwordInput = document.getElementById('password');
-    const toggleIcon = document.getElementById('toggleIcon');
-    
-    if (passwordInput.type === 'password') {
-        passwordInput.type = 'text';
-        toggleIcon.classList.remove('fa-eye');
-        toggleIcon.classList.add('fa-eye-slash');
-    } else {
-        passwordInput.type = 'password';
-        toggleIcon.classList.remove('fa-eye-slash');
-        toggleIcon.classList.add('fa-eye');
-    }
+    const input = document.getElementById('password');
+    const icon = document.getElementById('toggleIcon');
+    input.type = input.type === 'password' ? 'text' : 'password';
+    icon.classList.toggle('fa-eye');
+    icon.classList.toggle('fa-eye-slash');
 }
 
-document.getElementById('loginForm').addEventListener('submit', async (e) => {
+document.getElementById('loginForm').addEventListener('submit', async function (e) {
     e.preventDefault();
 
-    const phone = document.getElementById('phone').value;
-    const password = document.getElementById('password').value;
+    let phoneRaw = document.getElementById('phone').value.replace(/\D/g, '');
+    const password = document.getElementById('password').value.trim();
+    const errorBox = document.getElementById('errorMessage');
+    const errorText = document.getElementById('errorText');
+    const btn = document.getElementById('loginBtn');
+
+    if (!phoneRaw || !password) {
+        errorText.textContent = 'Barcha maydonlarni to‘ldiring';
+        errorBox.style.display = 'flex';
+        return;
+    }
+
+    // 🔥 HAR DOIM 998 BILAN YUBORAMIZ
+    if (!phoneRaw.startsWith('998')) {
+        phoneRaw = '998' + phoneRaw;
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Kuting...';
 
     try {
-        const response = await fetch('/login/', {
+        const res = await fetch('/api/auth/login/', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ phone, password })
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+                phone: phoneRaw,
+                password: password
+            })
         });
 
-        const data = await response.json();
+        const data = await res.json();
 
-        if (!response.ok) {
-            alert(data.error || 'Login yoki parol noto‘g‘ri');
-            return;
-        }
+        if (!res.ok) {
+    throw new Error(data.detail || 'Login yoki parol noto‘g‘ri');
+}
 
-        // ✅ ROLE BO‘YICHA REDIRECT
-        if (data.role === 'STUDENT') {
-            window.location.href = '/student/';
-        } else if (data.role === 'TEACHER') {
-            window.location.href = '/teacher/';
-        } else {
-            window.location.href = '/admin/';
-        }
+    errorBox.style.display = 'none';
+    
+    // ROLE BO‘YICHA REDIRECT
+    if (data.role === 'TEACHER') {
+        window.location.href = '/teacher/';
+    } else if (data.role === 'STUDENT') {
+        window.location.href = '/student/';
+    } else {
+        // fallback
+        window.location.href = '/profile/';
+    }
+
 
     } catch (err) {
-        alert('Server bilan bog‘lanib bo‘lmadi');
+        errorText.textContent = err.message;
+        errorBox.style.display = 'flex';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Kirish';
     }
 });
 
+// 🔧 INPUT — 9 TA RAQAM (998 SIZ)
+document.getElementById('phone').addEventListener('input', function () {
+    this.value = this.value.replace(/\D/g, '').slice(0, 9);
+});
 </script>
 {% endblock %}
-<script src="{% static 'js/auth.js' %}"></script>

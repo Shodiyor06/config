@@ -1,45 +1,52 @@
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
-from django.http import JsonResponse
-from django.contrib.auth import login
-from django.contrib.auth.hashers import check_password
-from accounts.models import User
-import json
+from django.utils.decorators import method_decorator
+from django.shortcuts import redirect, render
+from .models import User
+from django.contrib.auth import authenticate, login
+
+@method_decorator(csrf_exempt, name='dispatch')
+class LoginAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        phone = request.data.get('phone', '')
+        password = request.data.get('password', '')
+
+        # telefonni normallashtiramiz
+        phone = ''.join(filter(str.isdigit, phone))
+        if len(phone) == 9:
+            phone = '998' + phone
+
+        user = User.objects.filter(phone=phone, password=password).first()
+
+        if not user:
+            return Response({"detail": "Invalid credentials"}, status=401)
+        login(request, user)
+        # SESSION
+        # request.session['user_id'] = user.id
+        # request.session['user_role'] = user.role
+
+        return Response({"status": "ok"})
 
 
-@csrf_exempt   # 🔥 MANA SHU — 3-QADAM
-def login_view(request):
-    if request.method != 'POST':
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
+def redirect_by_role(request):
+    user_id = request.session.get('user_id')
+    role = request.session.get('user_role')
 
-    data = json.loads(request.body.decode('utf-8'))
-    phone = data.get('phone')
-    password = data.get('password')
+    if not user_id or not role:
+        return redirect('/login/')
 
-    if not phone or not password:
-        return JsonResponse(
-            {'error': 'Telefon va parol majburiy'},
-            status=400
-        )
+    if role == 'STUDENT':
+        return redirect('/student/')
 
-    try:
-        user = User.objects.get(phone=phone)
-    except User.DoesNotExist:
-        return JsonResponse(
-            {'error': 'Login yoki parol noto‘g‘ri'},
-            status=401
-        )
+    if role == 'TECHER':
+        return redirect('/teacher/')
+    
+    if role == 'ADMIN':
+        return redirect('/admin/')
 
-    if not check_password(password, user.password):
-        return JsonResponse(
-            {'error': 'Login yoki parol noto‘g‘ri'},
-            status=401
-        )
+    return redirect('/login/')
 
-    # ✅ HAMMASI TO‘G‘RI BO‘LSA
-    login(request, user)
-
-    return JsonResponse({
-        'success': True,
-        'role': user.role,
-        'name': user.phone
-    })

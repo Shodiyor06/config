@@ -46,11 +46,16 @@ INSTALLED_APPS = [
     'courses',
     'ratings',
     'homework',
+    'teacher',
+    'student',
+
     # 'frontend',
     'corsheaders',
 
     # third party
     'rest_framework',
+    'rest_framework.authtoken',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
